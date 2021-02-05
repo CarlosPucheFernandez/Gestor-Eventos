@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <!--Definicion del nombre del mapeo y la asignacion de las variables y tabla--> 
+    <class name="models.Reserva" table="reserva">
+        <id column="id" name="id" type="integer" >
+            <generator class="identity"/>
+        </id>
+        <property name="nombre" type="string"/>
+        <property name="apellido1" type="string"/>
+        <property name="apellido2" type="string"/>
+        <property name="acompanantes" type="integer"/>
+        <property name="telefono" type="string"/>
+        <property name="mail" type="string"/>
+        <property name="observaciones" type="text"/>
+        
+        <!--Definicion de la relacion con el modelo Oportunidad-->
+        <many-to-one class="models.Evento" name="evento" fetch = "select">
+            <column name="id_evento"></column>
+        </many-to-one>
+        
+    </class>
+</hibernate-mapping>
+
