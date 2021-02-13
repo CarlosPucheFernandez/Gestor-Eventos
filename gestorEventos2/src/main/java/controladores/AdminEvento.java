@@ -33,13 +33,12 @@ public class AdminEvento {
 //metodos acceso a datos
     public void nuevoEvento(String nombre, Date fecha, int aforo) {
         comprobarTransaccion();
-        models.Evento ac = new models.Evento();
-        ac.setNombre(nombre);
-        ac.setFecha(fecha);
-        ac.setAforo(aforo);
-        s.save(ac);
+        models.Evento ev = new models.Evento();
+        ev.setNombre(nombre);
+        ev.setFecha(fecha);
+        ev.setAforo(aforo);
+        s.save(ev);
         t.commit();
-        s.refresh(ac);
     }
 
     public void editarEvento(String nombre, Date fecha, int aforo, int id) {

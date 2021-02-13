@@ -33,7 +33,7 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import models.Evento;
 import models.Reserva;
-//import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JRException;
 
 /**
  * FXML Controller class
@@ -78,17 +78,24 @@ public class ListaEventosController implements Initializable {
     AdminEvento ae = new AdminEvento();
     @FXML
     private Button btnImprimir;
+    private ObservableList<Reserva> ol = null;
 
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-
+        //set de la tabla
+        tablaEventos.setItems(ol);
+        colNombre.setCellValueFactory(new PropertyValueFactory<Reserva, String>("nombre"));
+        colApe1.setCellValueFactory(new PropertyValueFactory<Reserva, String>("apellido1"));
+        colApe2.setCellValueFactory(new PropertyValueFactory<Reserva, String>("apellido2"));
+        colTelefono.setCellValueFactory(new PropertyValueFactory<Reserva, String>("telefono"));
+        colMail.setCellValueFactory(new PropertyValueFactory<Reserva, String>("mail"));
+        colAcompañantes.setCellValueFactory(new PropertyValueFactory<Reserva, Integer>("acompanantes"));
         //set del combobox
         cmbEvento.setItems(ae.mostrarEventos());
         btnImprimir.setText("Imprimir Todo");
-        UpdateTabla();
     }
 
     @FXML
@@ -123,15 +130,9 @@ public class ListaEventosController implements Initializable {
     }
 
     private void UpdateTabla() {
-        //set de la tabla
-        ObservableList<Reserva> ol = null;
-        tablaEventos.setItems(ol);
-        colNombre.setCellValueFactory(new PropertyValueFactory<Reserva, String>("nombre"));
-        colApe1.setCellValueFactory(new PropertyValueFactory<Reserva, String>("apellido1"));
-        colApe2.setCellValueFactory(new PropertyValueFactory<Reserva, String>("apellido2"));
-        colTelefono.setCellValueFactory(new PropertyValueFactory<Reserva, String>("telefono"));
-        colMail.setCellValueFactory(new PropertyValueFactory<Reserva, String>("mail"));
-        colAcompañantes.setCellValueFactory(new PropertyValueFactory<Reserva, Integer>("acompanantes"));
+        System.out.println("update");
+        System.out.println(ae.mostrarReserva(cmbEvento.getValue().getId()).toString());
+        tablaEventos.setItems(ae.mostrarReserva(cmbEvento.getValue().getId()));
     }
 
     @FXML
@@ -149,6 +150,8 @@ public class ListaEventosController implements Initializable {
             stage.setTitle("Editar Reserva");
             stage.setScene(new Scene(root));
             stage.showAndWait();
+//            tablaEventos.getItems().clear();
+            UpdateTabla();
         } catch (IOException ex) {
             ex.printStackTrace();
         }
@@ -165,16 +168,18 @@ public class ListaEventosController implements Initializable {
         alert.setHeaderText("");
         alert.setContentText("reserva eliminada correctamente");
         alert.showAndWait();
+        tablaEventos.getItems().clear();
+        actualizarTabla(event);
     }
 
     @FXML
-    private void imprimir(ActionEvent event) /*throws JRException, IOException, FileNotFoundException, SQLException*/ {
-//        JasperConection jc = new JasperConection();
-//        if (btnImprimir.getText() == "Imprimir Todos") {
-//            jc.ImprimirTodos();
-//        } else {
-//            jc.ImprimirIndividual(cmbEvento.getValue().getNombre(), cmbEvento.getValue().getId());
-//        }
+    private void imprimir(ActionEvent event) throws JRException, IOException, FileNotFoundException, SQLException {
+        JasperConection jc = new JasperConection();
+        if (btnImprimir.getText() == "Imprimir Todo") {
+            jc.ImprimirTodos();
+        } else {
+            jc.ImprimirIndividual(cmbEvento.getValue().getNombre(), cmbEvento.getValue().getId());
+        }
     }
 
 }

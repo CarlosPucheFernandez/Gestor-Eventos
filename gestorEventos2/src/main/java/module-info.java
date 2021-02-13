@@ -7,6 +7,7 @@ module com.mycompany.gestoreventos2 {
     requires java.xml.bind;
     requires java.naming;
     requires org.jboss.logging;
+    requires jasperreports;
     requires java.base;
 
     opens com.mycompany.gestoreventos2 to javafx.fxml, org.hibernate.orm.core, java.sql;
